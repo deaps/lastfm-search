@@ -2,6 +2,7 @@ var xmlHttpObj;
 var divTopTags;
 var divTopTracks;
 var toolTipInfoList = new Array();
+var lock = false;
 
 function CreateXmlHttpRequestObject(){ 
     xmlHttpObj = null;
@@ -47,11 +48,13 @@ function showSearchTopTags(){
 }
 function showSearchTopTracks(){
     var tag = divTopTags.getElementsByTagName('select')[0].value;
-    
+    var size = document.getElementById('numTracks').value;
+    console.log(tag);
+    console.log(size);
     toolTipInfoList = new Array();
     
     if(numTracks.value !== "" && numTracks.value > 0){
-        getTopTracks(tag);
+        getTopTracks(tag, size);
 
         divTopTracks = document.getElementById('pesquisaTopTracks');
 
@@ -70,53 +73,64 @@ function getTopTags(artista){
     
     if(xmlHttpObj){
         //Definição do URL para efectuar pedido HTTP - método GET
-        xmlHttpObj.open("GET","assets/widgets/lastfmApp/php/server.php?op=1&artista=" + artista, true);
-        
+        xmlHttpObj.open("GET","php/server.php?op=1&artista=" + artista, true);
+        console.log("php/server.php?op=1&artista=" + artista);
         //Registo do EventHandler
         xmlHttpObj.onreadystatechange = stateHandlerTopTags;
 	
         xmlHttpObj.send(null);
     }
 }
-function getTopTracks(tag){
+
+function getTopTracks(tag, numTracks){
     xmlHttpObj = CreateXmlHttpRequestObject();
     
     if(xmlHttpObj){
         //Definição do URL para efectuar pedido HTTP - método GET
-        xmlHttpObj.open("GET","assets/widgets/lastfmApp/php/server.php?op=2&tag=" + tag, true);
-        
+        xmlHttpObj.open("GET","php/server.php?op=2&tag=" + tag + "&numTracks=" 
+                + numTracks, true);
+        console.log("php/server.php?op=2&tag=" + tag + "&numTracks=" 
+                + numTracks);
         //Registo do EventHandler
         xmlHttpObj.onreadystatechange = stateHandlerTopTracks;
 	
         xmlHttpObj.send(null);
     }
 }
+
 function getToolTipInfo(track, artist){
     xmlHttpObj = CreateXmlHttpRequestObject();
     
     if(xmlHttpObj){
         //Definição do URL para efectuar pedido HTTP - método GET
-        xmlHttpObj.open("GET","assets/widgets/lastfmApp/php/server.php?op=3&track=" + track + "&artista=" + artist, false);
-        
+        xmlHttpObj.open("GET","php/server.php?op=3&track=" 
+                + track + "&artista=" + artist, true);
+        console.log("php/server.php?op=3&track=" 
+                + track + "&artista=" + artist);
         //Registo do EventHandler
         xmlHttpObj.onreadystatechange = stateHandlerToolTipInfo;
 	
         xmlHttpObj.send(null);
     }
 }
+
 function stateHandlerToolTipInfo(){
     if(xmlHttpObj.readyState === 4 && xmlHttpObj.status === 200){
 
         toolTipInfoJSON = JSON.parse(xmlHttpObj.responseText);
-		var toolTipInfo = toolTipInfoJSON.nome+";"+toolTipInfoJSON.album+";"+toolTipInfoJSON.artista[0]+
-				";"+toolTipInfoJSON.artista[1]+";"+toolTipInfoJSON.topAlbuns[0]+";"+toolTipInfoJSON.topAlbuns[1]+
-				";"+toolTipInfoJSON.topAlbuns[2]+";"+toolTipInfoJSON.topTrackArtista;
+		var toolTipInfo = toolTipInfoJSON.nome+";"+toolTipInfoJSON.album
+                + ";"+toolTipInfoJSON.artista[0]+";"+toolTipInfoJSON.artista[1]
+                + ";"+toolTipInfoJSON.topAlbuns[0]
+                + ";"+toolTipInfoJSON.topAlbuns[1]
+				+ ";"+toolTipInfoJSON.topAlbuns[2]
+                + ";"+toolTipInfoJSON.topTrackArtista;
 		//alert(toolTipInfo);
 		
 		toolTipInfoList.push(toolTipInfo);
-
+        lock = true;
     }
 }
+
 function stateHandlerTopTags(){
     if(xmlHttpObj.readyState === 4 && xmlHttpObj.status === 200){
         var comboBox = document.getElementById("topTagsCombo");
@@ -132,6 +146,7 @@ function stateHandlerTopTags(){
         }
     }
 }
+
 function stateHandlerTopTracks(){
 
 
@@ -150,10 +165,12 @@ function stateHandlerTopTracks(){
 		document.getElementById("pesquisaTopTracks").appendChild(loader);
 
                 
+        while(lock){}
 
 		for(i=0;i<numTracks;i++){
 			//topList.push(toptracks.track[i]);
-			getToolTipInfo(toptracks.track[i].name, toptracks.track[i].artist.name);
+			getToolTipInfo(toptracks.track[i].name, 
+                toptracks.track[i].artist.name);
 		}
 
 		loader.style.display="none";
@@ -216,7 +233,7 @@ function stateHandlerTopTracks(){
                 img.setAttribute("src",toptracks.track[i].image[2]['#text']);
             }
             catch(err){
-                img.setAttribute("src","assets/widgets/lastfmApp/resources/noImg.png");
+                img.setAttribute("src","resources/noImg.png");
             }
             td.appendChild(img);
             tr.appendChild(td);
@@ -232,11 +249,13 @@ function criaDescricao(div,str){
     var text = document.createTextNode(str);
     div.appendChild(text);
 }
+
 function criaComboBoxTopTags(div){
     var tag = document.createElement("select");
     tag.setAttribute("id","topTagsCombo");
     div.appendChild(tag);
 }
+
 function criaTabelaTopTracks(div){
     var tag = document.createElement("table");
     tag.setAttribute("id","topTracksTable");
@@ -244,6 +263,7 @@ function criaTabelaTopTracks(div){
 	tag.style.marginRight="auto";
     div.appendChild(tag);
 }
+
 function criaTextBoxTopTracks(div){
     var tag = document.createElement("input");
     tag.setAttribute("type","text");
@@ -253,6 +273,7 @@ function criaTextBoxTopTracks(div){
     tag.setAttribute("size","7");
     div.appendChild(tag);
 }
+
 function criaButtonTopTracks(div){
     var tag = document.createElement("button");
     tag.setAttribute("type","button");
@@ -272,6 +293,7 @@ function init() {
 		setTimeout("lookup("+count_total+")", 800);
 	}
 }
+
 function lookup(count) {
 	if(count === count_total) { 
 		showSearchTopTags();
