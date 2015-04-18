@@ -3,6 +3,7 @@ var divTopTags;
 var divTopTracks;
 var toolTipInfoList = new Array();
 var lock = false;
+var loader;
 
 function CreateXmlHttpRequestObject(){ 
     xmlHttpObj = null;
@@ -47,13 +48,15 @@ function showSearchTopTags(){
     }
 }
 function showSearchTopTracks(){
+	console.log("clicou");
     var tag = divTopTags.getElementsByTagName('select')[0].value;
     var size = document.getElementById('numTracks').value;
-    console.log(tag);
-    console.log(size);
+    //console.log(tag);
+    //console.log(size);
     toolTipInfoList = new Array();
     
     if(numTracks.value !== "" && numTracks.value > 0){
+		
         getTopTracks(tag, size);
 
         divTopTracks = document.getElementById('pesquisaTopTracks');
@@ -62,6 +65,14 @@ function showSearchTopTracks(){
         while(divTopTracks.firstChild) {
             divTopTracks.removeChild(divTopTracks.firstChild);
         }
+        
+        loader = document.createElement("img");
+		loader.setAttribute("src", "resources/ajax-loader.gif");
+		loader.style.display="block";
+		loader.style.width="20%";
+		loader.style.height="20%";
+		loader.style.margin="0 auto";
+		document.getElementById("pesquisaTopTracks").appendChild(loader);
 
         //criaDescricao(divTopTracks,"Top Tracks: ");
         criaTabelaTopTracks(divTopTracks);
@@ -74,7 +85,7 @@ function getTopTags(artista){
     if(xmlHttpObj){
         //Definição do URL para efectuar pedido HTTP - método GET
         xmlHttpObj.open("GET","php/server.php?op=1&artista=" + artista, true);
-        console.log("php/server.php?op=1&artista=" + artista);
+        //console.log("php/server.php?op=1&artista=" + artista);
         //Registo do EventHandler
         xmlHttpObj.onreadystatechange = stateHandlerTopTags;
 	
@@ -87,10 +98,10 @@ function getTopTracks(tag, numTracks){
     
     if(xmlHttpObj){
         //Definição do URL para efectuar pedido HTTP - método GET
-        xmlHttpObj.open("GET","php/server.php?op=2&tag=" + tag + "&numTracks=" 
+        xmlHttpObj.open("GET","php/server.php?op=2&tag=" + tag + "&num=" 
                 + numTracks, true);
-        console.log("php/server.php?op=2&tag=" + tag + "&numTracks=" 
-                + numTracks);
+        //console.log("php/server.php?op=2&tag=" + tag + "&num=" 
+        //        + numTracks);
         //Registo do EventHandler
         xmlHttpObj.onreadystatechange = stateHandlerTopTracks;
 	
@@ -105,8 +116,8 @@ function getToolTipInfo(track, artist){
         //Definição do URL para efectuar pedido HTTP - método GET
         xmlHttpObj.open("GET","php/server.php?op=3&track=" 
                 + track + "&artista=" + artist, true);
-        console.log("php/server.php?op=3&track=" 
-                + track + "&artista=" + artist);
+        //console.log("php/server.php?op=3&track=" 
+        //        + track + "&artista=" + artist);
         //Registo do EventHandler
         xmlHttpObj.onreadystatechange = stateHandlerToolTipInfo;
 	
@@ -116,7 +127,6 @@ function getToolTipInfo(track, artist){
 
 function stateHandlerToolTipInfo(){
     if(xmlHttpObj.readyState === 4 && xmlHttpObj.status === 200){
-
         toolTipInfoJSON = JSON.parse(xmlHttpObj.responseText);
 		var toolTipInfo = toolTipInfoJSON.nome+";"+toolTipInfoJSON.album
                 + ";"+toolTipInfoJSON.artista[0]+";"+toolTipInfoJSON.artista[1]
@@ -151,27 +161,30 @@ function stateHandlerTopTracks(){
 
 
 	if(xmlHttpObj.readyState === 4 && xmlHttpObj.status === 200){
+		console.log("ja ta");
 		var numTracks = document.getElementById("numTracks").value;
 		var topList = new Array();
+		//console.log(xmlHttpObj.responseText);
 		var jsonData = JSON.parse(xmlHttpObj.responseText);
-        var toptracks = jsonData.toptracks;
 
-		var loader = document.createElement("img");
+		/*var loader = document.createElement("img");
 		loader.setAttribute("src", "resources/ajax-loader.gif");
 		loader.style.display="block";
 		loader.style.width="20%";
 		loader.style.height="20%";
 		loader.style.margin="0 auto";
-		document.getElementById("pesquisaTopTracks").appendChild(loader);
+		document.getElementById("pesquisaTopTracks").appendChild(loader);*/
 
                 
-        while(lock){}
+        /*while(lock){}
 
 		for(i=0;i<numTracks;i++){
-			//topList.push(toptracks.track[i]);
-			getToolTipInfo(toptracks.track[i].name, 
-                toptracks.track[i].artist.name);
-		}
+			//console.log(jsonData[i].name);
+			//console.log(jsonData[i].artist.name);
+			//topList.push(jsonData.track[i]);
+			getToolTipInfo(jsonData[i].name, 
+                jsonData[i].artist.name);
+		}*/
 
 		loader.style.display="none";
 
@@ -212,15 +225,15 @@ function stateHandlerTopTracks(){
             //Insere o nome da Track
             td = document.createElement("td");
             var a = document.createElement("a");
-            a.setAttribute("href",toptracks.track[i].url);
+            a.setAttribute("href",jsonData[i].url);
 			a.style.textDecoration="none";
 			a.style.color="#000";
             
-            a.appendChild(document.createTextNode(toptracks.track[i].name));
+            a.appendChild(document.createTextNode(jsonData[i].name));
 			
             td.appendChild(a);
 
-			setToolTip(td, toolTipInfoList[i]);
+			//setToolTip(td, toolTipInfoList[i]);
 			
             tr.appendChild(td);
             
@@ -230,7 +243,7 @@ function stateHandlerTopTracks(){
 			img.setAttribute("width","64");
 			img.setAttribute("height","64");
             try{
-                img.setAttribute("src",toptracks.track[i].image[2]['#text']);
+                img.setAttribute("src",jsonData[i].image[2]['#text']);
             }
             catch(err){
                 img.setAttribute("src","resources/noImg.png");

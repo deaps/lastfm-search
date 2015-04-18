@@ -13,6 +13,8 @@ function setToolTip(tag, info) {
 
 function setToolTipContent(tool, info) {
 	// TNOME;TALBUM;ARTISTA.NOME;ARTISTA.IMG;T1ALBUM;T2ALBUM;T3ALBUM;
+	console.log(tool);
+	console.log(info);
 	var list = info.split(';');
 
 	setLeftBox(tool, list);

@@ -77,13 +77,13 @@ class RESTCall {
 			$track = $_GET['track'];
 			$track = self::trimString($track);
 		}
-		$nomeAlbum = getAlbumByTrack($artista,$track);
-		$imgArtista = getImgArtista($artista);
-		$albumTop2 = getAlbumTop3($artista);
-		$topTrackArtista = getTopTrackArtista($artista);
+		$nomeAlbum = self::getAlbumByTrack($artista,$track);
+		$imgArtista = self::getImgArtista($artista);
+		$albumTop2 = self::getAlbumTop3($artista);
+		$topTrackArtista = self::getTopTrackArtista($artista);
 			
 		$estrutura = new stdClass();
-		$albumTop = split(';',$albumTop2);
+		$albumTop = explode(';',$albumTop2);
 
 		$estrutura->nome = $track;
 		$estrutura->album = $nomeAlbum;
@@ -117,7 +117,7 @@ class RESTCall {
 	 * 
 	 * 
 	 */
-	function getImgArtista($artista){
+	public static function getImgArtista($artista){
 		$url = self::$baseURL."artist.getinfo&artist=$artista".self::$apiKey;
 		
 		$respostaXML = file_get_contents($url);
