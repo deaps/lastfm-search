@@ -42,6 +42,15 @@
                 <br>
                 <div id ="pesquisaTopTracks">
                     <!-- Vai ser preenchido pela funcao do script -->
+                    <div id="topTracksTable">
+						<div class="topTracksTable-item">
+							<div class="item-part number">1</div>
+							<div class="item-part title">over the sky</div>
+							<div class="item-part album">
+								<img src="resources/noImg.png" width="64" height="64"/>
+							</div>
+						</div>
+					</div>
                 </div>
                 <br>
                 <div id ="divToolTip">
@@ -52,6 +61,7 @@
             <div id="eventMenu">
 
             </div>
+            
         </div>
     </body>
 </html>

@@ -161,7 +161,7 @@ function stateHandlerTopTracks(){
 
 
 	if(xmlHttpObj.readyState === 4 && xmlHttpObj.status === 200){
-		console.log("ja ta");
+		//console.log("ja ta");
 		var numTracks = document.getElementById("numTracks").value;
 		var topList = new Array();
 		//console.log(xmlHttpObj.responseText);
@@ -188,8 +188,77 @@ function stateHandlerTopTracks(){
 
 		loader.style.display="none";
 
-		var table = document.getElementById("topTracksTable");
-		var thead = document.createElement("thead");
+		var div = document.getElementById("topTracksTable");
+		
+		for(i=0;i<numTracks;i++){
+			var item = document.createElement("div");
+			
+			item.setAttribute("class", "topTracksTable-item");
+			var tmp = document.createElement("div");
+			tmp.setAttribute("class", "item-part number");
+			tmp.appendChild(document.createTextNode(i+1));
+			item.appendChild(tmp);
+			
+			tmp = document.createElement("div");
+			tmp.setAttribute("class", "item-part title");
+			tmp.appendChild(document.createTextNode(jsonData[i].name));
+			item.appendChild(tmp);
+			
+			tmp = document.createElement("div");
+			tmp.setAttribute("class", "item-part album");
+			var img = document.createElement("img");
+			img.setAttribute("width","64");
+			img.setAttribute("height","64");
+            try{
+                img.setAttribute("src",jsonData[i].image[2]['#text']);
+            }
+            catch(err){
+                img.setAttribute("src","resources/noImg.png");
+            }
+            tmp.appendChild(img);
+			
+			item.appendChild(tmp);
+			div.appendChild(item);
+            /*//Insere o número do rank da Top Track
+            tr = document.createElement("tr");
+			tr.style.backgroundColor="#FF3333";
+            var td = document.createElement("td");
+			
+            td.appendChild(document.createTextNode(i+1));
+            tr.appendChild(td);
+            
+            //Insere o nome da Track
+            td = document.createElement("td");
+            var a = document.createElement("a");
+            a.setAttribute("href",jsonData[i].url);
+			a.style.textDecoration="none";
+			a.style.color="#000";
+            
+            a.appendChild(document.createTextNode(jsonData[i].name));
+			
+            td.appendChild(a);
+
+			//setToolTip(td, toolTipInfoList[i]);
+			
+            tr.appendChild(td);
+            
+            //Insere capa do album
+            td = document.createElement("td");
+            var img = document.createElement("img");
+			img.setAttribute("width","64");
+			img.setAttribute("height","64");
+            try{
+                img.setAttribute("src",jsonData[i].image[2]['#text']);
+            }
+            catch(err){
+                img.setAttribute("src","resources/noImg.png");
+            }
+            td.appendChild(img);
+            tr.appendChild(td);
+            
+            tbody.appendChild(tr);*/
+        }
+		/*var thead = document.createElement("thead");
         var tbody = document.createElement("tbody");
         var tr = document.createElement("tr");
         var th = document.createElement("th");
@@ -253,7 +322,7 @@ function stateHandlerTopTracks(){
             
             tbody.appendChild(tr);
         }
-		table.appendChild(tbody);
+		table.appendChild(tbody);*/
     
 	}
 }
@@ -270,10 +339,10 @@ function criaComboBoxTopTags(div){
 }
 
 function criaTabelaTopTracks(div){
-    var tag = document.createElement("table");
+    var tag = document.createElement("div");
     tag.setAttribute("id","topTracksTable");
-	tag.style.marginLeft="auto";
-	tag.style.marginRight="auto";
+	//tag.style.marginLeft="auto";
+	//tag.style.marginRight="auto";
     div.appendChild(tag);
 }
 

@@ -99,10 +99,11 @@ select {
 	-moz-box-shadow:inset 0px 1px 0px 0px #f29c93;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #f29c93;
 	box-shadow:inset 0px 1px 0px 0px #f29c93;
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fe1a00), color-stop(1, #ce0100) );
-	background:-moz-linear-gradient( center top, #fe1a00 5%, #ce0100 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fe1a00', endColorstr='#ce0100');
-	background-color:#fe1a00;
+	background: -webkit-linear-gradient(90deg, #c62d1f 5%, #f24537 100%);
+    background: -moz-linear-gradient(90deg, #c62d1f 5%, #f24537 100%);
+    background: -ms-linear-gradient(90deg, #c62d1f 5%, #f24537 100%);
+    background: linear-gradient(180deg, #f24537 5%, #c62d1f 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f24537",endColorstr="#c62d1f");
 	-webkit-border-top-left-radius:0px;
 	-moz-border-radius-topleft:0px;
 	border-top-left-radius:0px;
@@ -135,4 +136,67 @@ select {
 }.searchButton:active {
 	position:relative;
 	top:1px;
+}
+
+#pesquisaTopTracks {
+	max-height: 220px;
+	overflow-y: scroll; 
+}
+
+#topTracksTable {
+	margin: 10px;
+	line-height: 80px;
+	
+	-webkit-border-radius: 6px 6px 6px 6px;
+    -moz-border-radius: 6px 6px 6px 6px;
+    border-radius: 6px 6px 6px 6px;
+
+    color: #FFF;
+    text-align:center;
+}
+
+.item-part {
+	position:relative;
+	display: inline-block;
+	vertical-align: middle;
+	line-height: normal;     
+	padding: 0 10px;
+}
+
+
+.topTracksTable-item {
+	background: -webkit-linear-gradient(90deg, #c62d1f 5%, #f24537 100%);
+    background: -moz-linear-gradient(90deg, #c62d1f 5%, #f24537 100%);
+    background: -ms-linear-gradient(90deg, #c62d1f 5%, #f24537 100%);
+    background: linear-gradient(180deg, #f24537 5%, #c62d1f 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f24537",endColorstr="#c62d1f");
+    
+    text-align:left;
+    margin-top:3px;
+	margin-bottom:3px;
+}
+
+.topTracksTable-item .number {
+	
+	width:5%;
+}
+
+.topTracksTable-item .title {
+	
+	width:48%;
+}
+
+.topTracksTable-item .album {
+	
+	width:20%;
+}
+
+.topTracksTable-item:hover {
+	background: -webkit-linear-gradient(90deg, #f24537 5%, #c62d1f 100%);
+    background: -moz-linear-gradient(90deg, #f24537 5%, #c62d1f 100%);
+    background: -ms-linear-gradient(90deg, #f24537 5%, #c62d1f 100%);
+    background: linear-gradient(180deg, #c62d1f 5%, #f24537 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#c62d1f",endColorstr="#f24537");
+    cursor:pointer;
+    text-align:left;
 }
