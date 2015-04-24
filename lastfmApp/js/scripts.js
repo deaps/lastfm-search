@@ -194,6 +194,7 @@ function stateHandlerTopTracks(){
 			var item = document.createElement("div");
 			
 			item.setAttribute("class", "topTracksTable-item");
+			item.setAttribute("onclick", "openLink('"+jsonData[i].url+"')");
 			var tmp = document.createElement("div");
 			tmp.setAttribute("class", "item-part number");
 			tmp.appendChild(document.createTextNode(i+1));
@@ -395,4 +396,8 @@ function switchMenu(menu) {
 		musicas.style.display="none";
 		eventos.style.display="block";
 	}
+}
+
+function openLink(link) {
+	window.location.href = link;
 }
