@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>LastFMSearchApp - A lastFM search widget</title>
+        <meta charset="UTF-8">
+        <meta property="educationalUse" content="A lastFM search widget">
+    </head>
+    <body>
+        <div id="lastfmSearch"></div>
+
+        <!-- LastFMSearchApp -->
+        <script type="text/javascript" src="LastFMSearchApp/LastFMSearchApp.js"></script>
+    </body>
+</html>
+
+<!--<!DOCTYPE html>
+<html>
+    <head>
         <meta charset="UTF-8">
         <meta property="educationalUse" content="Trabalho de ARQSI">
         <script type="text/javascript" src="js/scripts.js"></script>
@@ -34,23 +49,11 @@
                 <h4 property="description">Pesquisa Top Tags</h4>
                 Artista:
                 <input type="text" id="nomeArtista" class="textfield" name="nomeArtista" autofocus>
-                <!--<button type="button" class="searchButton" onclick="showSearchTopTags()">Pesquisar</button><br>-->
 
                 <div id ="pesquisaTopTags">
-                    <!-- Vai ser preenchido pela funcao do script -->
                 </div>
                 <br>
                 <div id ="pesquisaTopTracks">
-                    <!-- Vai ser preenchido pela funcao do script -->
-                    <!--<div id="topTracksTable">
-						<div class="topTracksTable-item">
-							<div class="item-part number">1</div>
-							<div class="item-part title">over the sky</div>
-							<div class="item-part album">
-								<img src="resources/noImg.png" width="64" height="64"/>
-							</div>
-						</div>
-					</div>-->
                 </div>
                 <br>
                 <div id ="divToolTip">
@@ -64,4 +67,4 @@
             
         </div>
     </body>
-</html>
+</html>-->

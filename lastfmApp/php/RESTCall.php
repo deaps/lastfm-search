@@ -4,35 +4,34 @@
  * 
  */
 class RESTCall {
-    private static $baseURL = "http://ws.audioscrobbler.com/2.0/?method=";
-    private static $apiKey = "&api_key=78b8d126ce2fe76fb4c64cb10db0255b";
+    private $baseURL;
+    private $apiKey;
+	
+	public function RESTCall($apiKey) {
+		$this->baseURL = 'http://ws.audioscrobbler.com/2.0/?method=';
+		$this->apiKey = '&api_key=' . $apiKey;
+	}
+	
     /**
 	 * 
 	 * 
 	 */
-	public static function getLastFMTopTags() {
-		if(isset($_GET['artista'])) {
-			$artista = $_GET['artista'];
-			$artista = self::trimString($artista);
-		}
-		$url = self::$baseURL."artist.gettoptags&artist=$artista".self::$apiKey;
-		
+	public function getLastFMTopTags($artista) {
+		$url = $this->baseURL . "artist.gettoptags&artist=$artista" . $this->apiKey;
 		$respostaXML = file_get_contents($url);
-			
 		$newXML = new DOMDocument('1.0', 'ISO-8859-1');
 		$newXML->loadXML($respostaXML);
-		$nodelist = $newXML->getElementsByTagName("name");
-		$tags="";
+		$nodelist = $newXML->getElementsByTagName('name');
+		$tags = '';
 			
-		for($i=0;$i<$nodelist->length;$i++){
+		for($i = 0;$i<$nodelist->length;$i++) {
 			$tagNode = $nodelist->item($i);
 			$tagValue = $tagNode->nodeValue;
 			if($i == $nodelist->length - 1) {
-				   $tags.=$tagValue;
+				   $tags .= $tagValue;
 			} else {
-				$tags.=$tagValue . ",";
+				$tags .= $tagValue . ',';
 			}
-			
 		} 
 		echo $tags;
 	}
@@ -41,57 +40,39 @@ class RESTCall {
 	 * 
 	 * 
 	 */
-	public static function getLastFMTopTracks(){
-		if(isset($_GET['tag']) && isset($_GET['num'])) {
-			$tag = $_GET['tag'];
-			$tag = self::trimString($tag);
-			$num = intval($_GET['num']);
-			$num = self::trimString($num);
-				
-			$result = array(); 
-			$url = self::$baseURL."tag.gettoptracks&tag=$tag&format=json".self::$apiKey;
+	public function getLastFMTopTracks($tag, $num) {
+		$result = array(); 
+		$url = $this->baseURL . "tag.gettoptracks&tag=$tag&format=json" . $this->apiKey;
 			
-			$respostaJSON=file_get_contents($url);
-			$tmp = json_decode($respostaJSON, true);
+		$respostaJSON = file_get_contents($url);
+		$tmp = json_decode($respostaJSON, true);
 
-			for($i = 0; $i < $num; $i++) {
-				array_push($result, $tmp['toptracks']['track'][$i]);
-			}
-			
-			echo json_encode($result);
-		} else {
-			echo "null";
+		for($i = 0; $i < $num; $i++) {
+			array_push($result, $tmp['toptracks']['track'][$i]);
 		}
-			
+		echo json_encode($result);
 	}
 	
 	/**
 	 * 
 	 * 
 	 */
-	public static function getLastFMInfo(){
-		if(isset($_GET['artista']) && isset($_GET['track'])){
-			$artista = $_GET['artista'];
-			$artista = self::trimString($artista);
-				
-			$track = $_GET['track'];
-			$track = self::trimString($track);
-		}
-		$nomeAlbum = self::getAlbumByTrack($artista,$track);
-		$imgArtista = self::getImgArtista($artista);
-		$albumTop2 = self::getAlbumTop3($artista);
-		$topTrackArtista = self::getTopTrackArtista($artista);
+	public function getLastFMInfo($artista, $track) {
+
+		$nomeAlbum = $this->getAlbumByTrack($artista, $track);
+		$imgArtista = $this->getImgArtista($artista);
+		$albumTop2 = $this->getAlbumTop3($artista);
+		$topTrackArtista = $this->getTopTrackArtista($artista);
 			
 		$estrutura = new stdClass();
-		$albumTop = explode(';',$albumTop2);
+		$albumTop = explode(';', $albumTop2);
 
 		$estrutura->nome = $track;
 		$estrutura->album = $nomeAlbum;
-		$estrutura->artista = array(array($artista),array($imgArtista));
-		$estrutura->topAlbuns = array(array($albumTop[0]),array($albumTop[1]),array($albumTop[2]));
+		$estrutura->artista = array(array($artista), array($imgArtista));
+		$estrutura->topAlbuns = array(array($albumTop[0]), array($albumTop[1]), array($albumTop[2]));
 		$estrutura->topTrackArtista = $topTrackArtista;
 
-			
 		echo json_encode($estrutura);
 	}
 	
@@ -99,14 +80,11 @@ class RESTCall {
 	 * 
 	 * 
 	 */
-	public static function getAlbumByTrack($artista,$track){
-		$url = self::$baseURL."track.getInfo&artist=$artista&track=$track".self::$apiKey;
+	public function getAlbumByTrack($artista,$track) {
+		$url = $this->baseURL . "track.getInfo&artist=$artista&track=$track" . $this->apiKey;
 			
 		$respostaXML = file_get_contents($url);
-
-			
-		$newXML = new DOMDocument('1.0','ISO-8859-1');
-
+		$newXML = new DOMDocument('1.0', 'ISO-8859-1');
 		$newXML->loadXML($respostaXML);
 		$resultado = $newXML->getElementsByTagName('title')->item(0)->nodeValue;
 			
@@ -117,12 +95,12 @@ class RESTCall {
 	 * 
 	 * 
 	 */
-	public static function getImgArtista($artista){
-		$url = self::$baseURL."artist.getinfo&artist=$artista".self::$apiKey;
+	public function getImgArtista($artista) {
+		$url = $this->baseURL . "artist.getinfo&artist=$artista" . $this->apiKey;
 		
 		$respostaXML = file_get_contents($url);
 
-		$newXML = new DOMDocument('1.0','ISO-8859-1');
+		$newXML = new DOMDocument('1.0', 'ISO-8859-1');
 		$newXML->loadXML($respostaXML);
 			
 		$resultado = $newXML->getElementsByTagName('image')->item(1)->nodeValue;
@@ -134,29 +112,26 @@ class RESTCall {
 	 * 
 	 * 
 	 */
-	public static function getAlbumTop3($artista){
+	public function getAlbumTop3($artista) {
 			
-		$url = self::$baseURL."artist.gettopalbums&artist=$artista".self::$apiKey;
+		$url = $this->baseURL . "artist.gettopalbums&artist=$artista" . $this->apiKey;
 			
 		$respostaXML = file_get_contents($url);
-
-		$newXML = new DOMDocument('1.0','ISO-8859-1');
+		$newXML = new DOMDocument('1.0', 'ISO-8859-1');
 		$newXML->loadXML($respostaXML);
 		$resultado = '';
-			
 		$albums =$newXML->getElementsByTagName('album');
 
-		//Par cada album do Top 3, vai buscar o nome
-		$count=0;
+		# Par cada album do Top 3, vai buscar o nome
+		$count = 0;
 		foreach($albums as $node) {
-				
 				
 			$resultado .= $node->getElementsByTagName('name')->item(0)->nodeValue;
 			$count++;
 			if($count >= 3) {
 				break;
 			} else {
-				$resultado .= ";";
+				$resultado .= ';';
 			}
 		}
 			
@@ -167,29 +142,17 @@ class RESTCall {
 	 * 
 	 * 
 	 */
-	public static function getTopTrackArtista($artista){
-		$url = self::$baseURL."artist.gettoptracks&artist=$artista".self::$apiKey;
+	public function getTopTrackArtista($artista) {
+		$url = $this->baseURL . "artist.gettoptracks&artist=$artista" . $this->apiKey;
 			
 		$respostaXML = file_get_contents($url);
-
-		$newXML = new DOMDocument('1.0','ISO-8859-1');
+		$newXML = new DOMDocument('1.0', 'ISO-8859-1');
 		$newXML->loadXML($respostaXML);
-			
 		$resultado = $newXML->getElementsByTagName('name')->item(0)->nodeValue;
 			
 		return $resultado;
 	}
 	
-	/**
-	 * 
-	 * 
-	 */
-	private static function trimString($str){
-		$str = ltrim($str);
-		$str = rtrim($str);
-		$str = strtr($str, array (' ' => '+'));
-		
-		return $str;
-	}
+	
 }
 ?>
