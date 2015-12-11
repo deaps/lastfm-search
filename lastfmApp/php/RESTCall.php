@@ -46,9 +46,9 @@ class RESTCall {
 			
 		$respostaJSON = file_get_contents($url);
 		$tmp = json_decode($respostaJSON, true);
-
+		
 		for($i = 0; $i < $num; $i++) {
-			array_push($result, $tmp['toptracks']['track'][$i]);
+			array_push($result, $tmp['tracks']['track'][$i]);
 		}
 		echo json_encode($result);
 	}

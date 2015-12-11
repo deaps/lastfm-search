@@ -16,7 +16,7 @@ if(isset($_GET['op'])) {
                 $handler->getLastFMTopTags($artista);
             }
             break;
-        /*case(2):
+        case(2):
             if(isset($_GET['tag']) && isset($_GET['num'])) {
                 $tag = $_GET['tag'];
                 $tag = trimString($tag);
@@ -35,7 +35,7 @@ if(isset($_GET['op'])) {
                 $track = trimString($track);
                 $handler->getLastFMInfo($artista, $track);
             }
-            break;*/
+            break;
         default:
             echo 'You\'re doing it wrong!';
     }

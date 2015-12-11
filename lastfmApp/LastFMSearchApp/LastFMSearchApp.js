@@ -18,7 +18,7 @@ var APIAccess = (function() {
 		
 		if(xmlHttpObj) {
 			//Definição do URL para efectuar pedido HTTP - método GET
-			xmlHttpObj.open("GET", "php/server.php?op=1&artista=" + artista, true);
+			xmlHttpObj.open("GET", encodeURI("php/server.php?op=1&artista=" + artista), true);
 			//Registo do EventHandler
 			xmlHttpObj.onreadystatechange = function() {
 				if (xmlHttpObj.readyState == 4 && xmlHttpObj.status == 200) {
@@ -29,12 +29,25 @@ var APIAccess = (function() {
 		}
 	};
 	
-	var getTopTracks = function() {
-		// Not Implemented
+	var getTopTracks = function(tagName, numberOfTags, stateHandlerTopTracks) {
+		var xmlHttpObj = _createXmlHttpRequestObject();
+		
+		if(xmlHttpObj) {
+			//Definição do URL para efectuar pedido HTTP - método GET
+			xmlHttpObj.open("GET", encodeURI("php/server.php?op=2&tag=" + tagName + "&num=" + numberOfTags), true);
+			//Registo do EventHandler
+			xmlHttpObj.onreadystatechange = function() {
+				if (xmlHttpObj.readyState == 4 && xmlHttpObj.status == 200) {
+					stateHandlerTopTracks(xmlHttpObj.responseText);
+				}
+			};
+			xmlHttpObj.send();
+		}
 	};
 	
 	return {
-		getTopTags: getTopTags
+		getTopTags: getTopTags,
+		getTopTracks: getTopTracks
 	};
 	
 })();
@@ -69,7 +82,7 @@ var LastFMSearchApp = (function(APIAccess) {
 		textField.setAttribute("class", "textfield");
 		textField.setAttribute("name", "artistName");
 		textField.setAttribute("autofocus", "");
-		textField.setAttribute("placeholder", "Search an artist/band");
+		textField.setAttribute("placeholder", "Search an artist and press enter");
 		
 		var selectTags = document.createElement("select");
 		selectTags.setAttribute("id","topTagsCombo");
@@ -104,7 +117,25 @@ var LastFMSearchApp = (function(APIAccess) {
 	};
 	
 	var _getTopTracks = function() {
-		console.warn("Not Implemented!");
+		var list = document.getElementById("resultDiv");
+		list.innerHTML = "";
+		var select = document.getElementById("topTagsCombo");
+		var tagName = select.options[select.selectedIndex].text;
+		var numberOfTags = parseInt(document.getElementById("numTracks").value);
+
+		if(isNaN(numberOfTags) || numberOfTags <= 0) {
+			var errMsg = document.createElement("div");
+			errMsg.setAttribute("id", "errorMsg");
+			errMsg.appendChild(document.createTextNode("Select a valid number of tags! "));
+			list.appendChild(errMsg);
+		} else {
+			APIAccess.getTopTracks(tagName, numberOfTags, _getTopTracksHandler);
+		}
+		
+	};
+	
+	var _getTopTracksHandler = function(response) {
+		console.log(response);
 	};
 	
 	var _getTopTags = function(artistName) {
@@ -128,6 +159,7 @@ var LastFMSearchApp = (function(APIAccess) {
 		document.getElementById("artistName").onkeyup = function(e) {
 			// Press Enter
 			if(e.keyCode === 13) {
+				document.getElementById("topTagsCombo").innerHTML = "";
 				_getTopTags(this.value);
 			}
 		};
