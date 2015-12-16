@@ -135,7 +135,34 @@ var LastFMSearchApp = (function(APIAccess) {
 	};
 	
 	var _getTopTracksHandler = function(response) {
-		console.log(response);
+		var list = document.getElementById("resultDiv");
+		var tracksList = JSON.parse(response);
+
+		tracksList.forEach(function(element) {
+
+			var newItem = document.createElement("div");
+			newItem.setAttribute("class","trackItem");
+			var image = document.createElement("img");
+			image.setAttribute("width", "64");
+			image.setAttribute("height", "64");
+			try {
+                image.setAttribute("src",element.image[1]["#text"]);
+            }
+            catch(err) {
+                image.setAttribute("src","LastFMSearchApp/resources/noImg.png");	
+            }
+			
+			newItem.appendChild(image);
+			var text = document.createElement("div");
+			text.appendChild(document.createTextNode(element.name));
+			newItem.appendChild(text);
+			text = document.createElement("div");
+			text.appendChild(document.createTextNode(element.artist.name));
+			newItem.appendChild(text);
+			
+			list.appendChild(newItem);
+		}, this);
+
 	};
 	
 	var _getTopTags = function(artistName) {
