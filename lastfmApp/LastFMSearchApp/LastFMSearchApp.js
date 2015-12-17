@@ -120,15 +120,20 @@ var LastFMSearchApp = (function(APIAccess) {
 		var list = document.getElementById("resultDiv");
 		list.innerHTML = "";
 		var select = document.getElementById("topTagsCombo");
-		var tagName = select.options[select.selectedIndex].text;
+		var tagName = select.selectedIndex !== -1 ? select.options[select.selectedIndex].text : null;
 		var numberOfTags = parseInt(document.getElementById("numTracks").value);
-
-		if(isNaN(numberOfTags) || numberOfTags <= 0) {
-			var errMsg = document.createElement("div");
-			errMsg.setAttribute("id", "errorMsg");
-			errMsg.appendChild(document.createTextNode("Select a valid number of tags! "));
-			list.appendChild(errMsg);
+		console.log(tagName);
+		if(isNaN(numberOfTags) || numberOfTags <= 0 || tagName === null) {
+			var errMsgDiv = document.createElement("div");
+			errMsgDiv.setAttribute("id", "errorMsg");
+			errMsgDiv.appendChild(document.createTextNode("Something is wrong! "));
+			list.appendChild(errMsgDiv);
 		} else {
+			var spinner = new Image(64, 64);
+			spinner.src = "LastFMSearchApp/resources/ajax-loader.gif";
+			spinner.onload = function() {
+				list.appendChild(spinner);
+			};
 			APIAccess.getTopTracks(tagName, numberOfTags, _getTopTracksHandler);
 		}
 		
@@ -136,6 +141,8 @@ var LastFMSearchApp = (function(APIAccess) {
 	
 	var _getTopTracksHandler = function(response) {
 		var list = document.getElementById("resultDiv");
+		list.innerHTML = "";
+		
 		var tracksList = JSON.parse(response);
 
 		tracksList.forEach(function(element) {
@@ -208,7 +215,6 @@ var LastFMSearchApp = (function(APIAccess) {
 
 	return {
 		start: _start,
-		test: test3
 	};
 	
 })(APIAccess);
