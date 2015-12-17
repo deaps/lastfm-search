@@ -142,23 +142,25 @@ var LastFMSearchApp = (function(APIAccess) {
 
 			var newItem = document.createElement("div");
 			newItem.setAttribute("class","trackItem");
-			var image = document.createElement("img");
-			image.setAttribute("width", "64");
-			image.setAttribute("height", "64");
+			
+			// In order to load the image first then show the item
+			var image = new Image(64, 64);
+			image.onload = function() {
+				newItem.appendChild(image);
+				var text = document.createElement("div");
+				text.appendChild(document.createTextNode(element.name));
+				newItem.appendChild(text);
+				text = document.createElement("div");
+				text.appendChild(document.createTextNode(element.artist.name));
+				newItem.appendChild(text);
+			};
+			
 			try {
-                image.setAttribute("src",element.image[1]["#text"]);
+                image.src = element.image[1]["#text"];
             }
             catch(err) {
-                image.setAttribute("src","LastFMSearchApp/resources/noImg.png");	
+                image.src = "LastFMSearchApp/resources/noImg.png";	
             }
-			
-			newItem.appendChild(image);
-			var text = document.createElement("div");
-			text.appendChild(document.createTextNode(element.name));
-			newItem.appendChild(text);
-			text = document.createElement("div");
-			text.appendChild(document.createTextNode(element.artist.name));
-			newItem.appendChild(text);
 			
 			list.appendChild(newItem);
 		}, this);
