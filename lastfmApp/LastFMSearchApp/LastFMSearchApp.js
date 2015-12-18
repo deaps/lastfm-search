@@ -92,14 +92,14 @@ var LastFMSearchApp = (function(APIAccess) {
 		numberOfTags.setAttribute("name","numTracks");
 		numberOfTags.setAttribute("id","numTracks");
 		numberOfTags.setAttribute("placeholder","Nº Tracks");
-		numberOfTags.setAttribute("size","5");
+		//numberOfTags.setAttribute("size","5");
 		
 		var button = document.createElement("button");
 		button.setAttribute("class","searchButton");
 		button.addEventListener("click" , function() {
 			_getTopTracks();
 			});
-		button.appendChild(document.createTextNode("Go"));
+		button.appendChild(document.createTextNode("Search"));
 		
 		var resultDiv = document.createElement("div");
 		resultDiv.setAttribute("id", "resultDiv");
@@ -109,6 +109,7 @@ var LastFMSearchApp = (function(APIAccess) {
 		app.appendChild(textField);
 		app.appendChild(document.createElement("br"));
 		app.appendChild(selectTags);
+		app.appendChild(document.createElement("br"));
 		app.appendChild(numberOfTags);
 		app.appendChild(button);
 		app.appendChild(document.createElement("br"));

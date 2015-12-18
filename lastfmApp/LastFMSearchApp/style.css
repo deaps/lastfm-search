@@ -1,0 +1,43 @@
+#lastfmSearch {
+	padding: 10px;
+	border: 1px solid #D8001A;
+	margin:0 auto;
+	width:200px;
+	text-align: center;
+}
+
+#lastfmSearch > img {
+	
+}
+
+#lastfmSearch > #artistName {
+	width: 170px;
+	margin-bottom: 10px;
+}
+
+#lastfmSearch > #topTagsCombo {
+	width: 178px;
+	margin-bottom: 10px;
+}
+
+#lastfmSearch > #numTracks {
+	width: 105px;
+	margin-bottom: 10px;
+}
+
+#lastfmSearch > .searchButton {
+	width: 65px;
+}
+
+#lastfmSearch > #resultDiv {
+	text-align: center;
+}
+
+#lastfmSearch > #resultDiv .trackItem {
+	text-align: left;
+}
+
+/*#lastfmSearch > #resultDiv div {
+	display: inline-block;
+	overflow: hidden;
+}*/
