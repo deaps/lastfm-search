@@ -2,13 +2,13 @@
 	padding: 10px;
 	border: 1px solid #D8001A;
 	margin:0 auto;
-	width:200px;
+	width:220px;
 	text-align: center;
 }
 
-#lastfmSearch > img {
+/*#lastfmSearch > img {
 	
-}
+}*/
 
 #lastfmSearch > #artistName {
 	width: 170px;
@@ -34,10 +34,25 @@
 }
 
 #lastfmSearch > #resultDiv .trackItem {
+	color: inherit;
+	cursor: pointer;
 	text-align: left;
+	display: block;
+	margin-top: 3px;
+	text-decoration: none;
 }
 
-/*#lastfmSearch > #resultDiv div {
-	display: inline-block;
-	overflow: hidden;
-}*/
+#lastfmSearch > #resultDiv .trackItem > img {
+	float: left;
+	margin-right:3px;
+}
+
+#lastfmSearch > #resultDiv .trackItem > div {
+	padding-top: 10px;
+}
+
+.trackItem:after {
+  content: "";
+  display: table;
+  clear: both;
+}

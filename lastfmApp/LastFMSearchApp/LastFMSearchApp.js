@@ -123,7 +123,7 @@ var LastFMSearchApp = (function(APIAccess) {
 		var select = document.getElementById("topTagsCombo");
 		var tagName = select.selectedIndex !== -1 ? select.options[select.selectedIndex].text : null;
 		var numberOfTags = parseInt(document.getElementById("numTracks").value);
-		console.log(tagName);
+
 		if(isNaN(numberOfTags) || numberOfTags <= 0 || tagName === null) {
 			var errMsgDiv = document.createElement("div");
 			errMsgDiv.setAttribute("id", "errorMsg");
@@ -148,19 +148,24 @@ var LastFMSearchApp = (function(APIAccess) {
 
 		tracksList.forEach(function(element) {
 
-			var newItem = document.createElement("div");
+			var newItem = document.createElement("a");
 			newItem.setAttribute("class","trackItem");
+			newItem.title = element.name + "Webpage";
+			newItem.href = element.url;
 			
 			// In order to load the image first then show the item
 			var image = new Image(64, 64);
 			image.onload = function() {
 				newItem.appendChild(image);
-				var text = document.createElement("div");
-				text.appendChild(document.createTextNode(element.name));
-				newItem.appendChild(text);
-				text = document.createElement("div");
-				text.appendChild(document.createTextNode(element.artist.name));
-				newItem.appendChild(text);
+				var textDiv = document.createElement("div");
+				var span = document.createElement("span");
+				span.appendChild(document.createTextNode(element.name));
+				textDiv.appendChild(span);
+				textDiv.appendChild(document.createElement("br"));
+				span = document.createElement("span");
+				span.appendChild(document.createTextNode(element.artist.name));
+				textDiv.appendChild(span);
+				newItem.appendChild(textDiv);
 			};
 			
 			try {
